@@ -17,6 +17,8 @@ void dae::GameObject::Update()
 	{
 		component->Update();
 	}
+
+	CleanupComponents();
 }
 void dae::GameObject::FixedUpdate()
 {
@@ -34,15 +36,9 @@ void dae::GameObject::Render() const
 	}
 }
 
-//void dae::GameObject::SetTexture(const std::string& filename)
-//{
-//	//m_texture = ResourceManager::GetInstance().LoadTexture(filename);
-//}
-
 void dae::GameObject::SetPosition(float x, float y)
 {
 	if (auto transform = GetComponent<Transform>())
 		transform->SetPosition(x, y, 0.0f);
-	//GetComponent<Transform>()->SetPosition(x, y, 0.0f);
 }
 

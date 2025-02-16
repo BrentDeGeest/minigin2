@@ -16,7 +16,6 @@ namespace dae
 		virtual void FixedUpdate();
 		virtual void Render() const;
 
-		//void SetTexture(const std::string& filename);
 		void SetPosition(float x, float y);
 
 		template <typename T, typename... Args>
@@ -26,7 +25,9 @@ namespace dae
 		T* GetComponent() const;
 
 		template <typename T>
-		void RemoveComponent();
+		void MarkComponentForRemoval(); // Marks a component for deletion
+
+		void CleanupComponents(); // Called at the end of the update loop
 
 		GameObject() ;
 		virtual ~GameObject();
@@ -72,19 +73,30 @@ namespace dae
 		return nullptr;
 	}
 
-	// RemoveComponent: Deletes a specific component type from the GameObject
+	// MarkComponentForRemoval: Flags a specific component type for deletion
 	template <typename T>
-	void GameObject::RemoveComponent()
+	void GameObject::MarkComponentForRemoval()
 	{
 		static_assert(std::is_base_of<Component, T>::value, "T must be a Component");
 
-		for (auto it = m_components.begin(); it != m_components.end(); ++it)
+		for (auto& component : m_components)
 		{
-			if (dynamic_cast<T*>(it->get()))
+			if (dynamic_cast<T*>(component.get()))
 			{
-				m_components.erase(it);
-				return; // Only remove the first found instance
+				component->MarkForDeletion();
+				return; // Only mark the first found instance
 			}
 		}
+	}
+
+	// CleanupComponents: Actually removes flagged components at the end of the update loop
+	inline void GameObject::CleanupComponents()
+	{
+		m_components.erase(
+			std::remove_if(m_components.begin(), m_components.end(),
+				[](const std::unique_ptr<Component>& component) {
+					return component->IsMarkedForDeletion();
+				}),
+			m_components.end());
 	}
 }

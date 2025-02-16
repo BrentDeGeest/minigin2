@@ -16,7 +16,11 @@ namespace dae
         void SetOwner(GameObject* owner) { m_pOwner = owner; }
         GameObject* GetOwner() const { return m_pOwner; }
 
+        void MarkForDeletion() { m_IsMarkedForDeletion = true; }
+        bool IsMarkedForDeletion() const { return m_IsMarkedForDeletion; }
+
     protected:
         GameObject* m_pOwner = nullptr; // Pointer to the parent GameObject
+        bool m_IsMarkedForDeletion = false; // New flag for deletion
     };
 }

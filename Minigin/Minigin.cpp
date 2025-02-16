@@ -9,6 +9,7 @@
 #include "SceneManager.h"
 #include "Renderer.h"
 #include "ResourceManager.h"
+#include "Time.h"
 
 SDL_Window* g_window{};
 
@@ -31,7 +32,7 @@ void PrintSDLVersion()
 	printf("We are linking against SDL_image version %u.%u.%u.\n",
 		version.major, version.minor, version.patch);
 
-	SDL_TTF_VERSION(&version)
+	SDL_TTF_VERSION(&version);
 	printf("We compiled against SDL_ttf version %u.%u.%u ...\n",
 		version.major, version.minor, version.patch);
 
@@ -65,6 +66,8 @@ dae::Minigin::Minigin(const std::string &dataPath)
 	Renderer::GetInstance().Init(g_window);
 
 	ResourceManager::GetInstance().Init(dataPath);
+
+	Time::Init();
 }
 
 dae::Minigin::~Minigin()
@@ -85,10 +88,23 @@ void dae::Minigin::Run(const std::function<void()>& load)
 
 	// todo: this update loop could use some work.
 	bool doContinue = true;
+	
+
 	while (doContinue)
 	{
+		Time::Update();
+
 		doContinue = input.ProcessInput();
+
+		// Process all fixed updates before rendering
+		while (Time::ShouldUpdateFixed())
+		{
+			sceneManager.FixedUpdate(); // Physics logic
+			Time::ConsumeFixedStep();
+		}
+
 		sceneManager.Update();
 		renderer.Render();
+
 	}
 }

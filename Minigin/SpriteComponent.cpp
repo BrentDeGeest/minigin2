@@ -15,9 +15,9 @@ void dae::SpriteComponent::Render() const
 
 	Transform* transform = m_pOwner->GetComponent<Transform>();
 	if (!transform) return;
-	const auto& pos = transform->GetLocalPosition();
+	//const auto& pos = transform->GetLocalPosition();
+	const auto& pos = transform->GetWorldPosition();
 	std::cout << "SpriteComponent::Render() | Position: " << pos.x << ", " << pos.y << std::endl;
-	//const auto& pos = transform->GetWorldPosition();
 	Renderer::GetInstance().RenderTexture(*m_Texture, pos.x, pos.y);
 
 }

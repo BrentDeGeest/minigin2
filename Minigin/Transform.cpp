@@ -12,11 +12,24 @@
 void dae::Transform::SetPosition(const float x, const float y, const float z)
 {
 
-    if (m_LocalPosition.x == x && m_LocalPosition.y == y && m_LocalPosition.z == z)
-        return; // Avoid unnecessary updates if the position is unchanged
+    glm::vec3 newPosition = { x, y, z };
 
-    m_LocalPosition = { x, y, z };
-    MarkDirty(); // Mark this transform and its children as needing updates
+    if (m_pOwner && m_pOwner->GetParent())
+    {
+        auto parentTransform = m_pOwner->GetParent()->GetComponent<Transform>();
+        if (parentTransform)
+        {
+            // Convert world position to local position relative to parent
+            m_LocalPosition = newPosition - parentTransform->GetWorldPosition();
+        }
+    }
+    else
+    {
+        // If no parent, treat position as world position
+        m_LocalPosition = newPosition;
+    }
+
+    MarkDirty(); // Ensure child objects get updated
 }
 
 glm::vec3 dae::Transform::GetWorldPosition()

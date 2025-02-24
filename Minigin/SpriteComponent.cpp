@@ -2,6 +2,7 @@
 #include "ResourceManager.h"
 #include "Renderer.h"
 #include "GameObject.h"
+#include <iostream>
 
 dae::SpriteComponent::SpriteComponent(const std::string& texturePath)
 {
@@ -13,11 +14,11 @@ void dae::SpriteComponent::Render() const
 	if (!m_pOwner) return; // Ensure the component has an owner
 
 	Transform* transform = m_pOwner->GetComponent<Transform>();
-	if (transform)
-	{
-		const auto& pos = transform->GetPosition();
-		Renderer::GetInstance().RenderTexture(*m_Texture, pos.x, pos.y);
-	}
+	if (!transform) return;
+	const auto& pos = transform->GetLocalPosition();
+	std::cout << "SpriteComponent::Render() | Position: " << pos.x << ", " << pos.y << std::endl;
+	//const auto& pos = transform->GetWorldPosition();
+	Renderer::GetInstance().RenderTexture(*m_Texture, pos.x, pos.y);
 
 }
 

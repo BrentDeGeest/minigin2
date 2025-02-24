@@ -1,5 +1,6 @@
 #include "Time.h"
 #include <chrono>
+#include <thread>
 
 std::chrono::high_resolution_clock::time_point Time::m_LastTime;
 float Time::m_DeltaTime = 0.0f;
@@ -34,5 +35,17 @@ bool Time::ShouldUpdateFixed()
 void Time::ConsumeFixedStep()
 {
     m_Lag -= m_FixedTimeStep;
+}
+
+void Time::Sleep()
+{
+    const auto frameDuration = std::chrono::milliseconds(1000 / m_DesiredFPS);
+    const auto currentTime = std::chrono::high_resolution_clock::now();
+    const auto sleepTime = m_LastTime + frameDuration - currentTime;
+
+    if (sleepTime > std::chrono::milliseconds(0)) // Only sleep if we need to
+    {
+        std::this_thread::sleep_for(sleepTime);
+    }
 }
 

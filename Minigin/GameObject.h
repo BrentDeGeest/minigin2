@@ -6,14 +6,15 @@
 
 namespace dae
 {
-	class GameObject final
+	class GameObject final : public std::enable_shared_from_this<GameObject>
 	{
 	public:
 		virtual void Update();
 		virtual void FixedUpdate();
 		virtual void Render() const;
 
-		void SetPosition(float x, float y);
+		void SetPosition(float x, float y, float z = 0.0f);
+		glm::vec3 GetWorldPosition() const;
 
 		template <typename T, typename... Args>
 		T* AddComponent(Args&&... args);
@@ -26,8 +27,17 @@ namespace dae
 
 		void CleanupComponents(); // Called at the end of the update loop
 
+		// Parent-Child System
+		void AddChild(std::shared_ptr<GameObject> child);
+		void RemoveChild(std::shared_ptr<GameObject> child);
+		void DetachFromParent();
+
+		const std::vector<std::shared_ptr<GameObject>>& GetChildren() const { return m_Children; }
+		std::shared_ptr<GameObject> GetParent() const { return m_Parent.lock(); }
+
 		GameObject() ;
 		virtual ~GameObject();
+
 		GameObject(const GameObject& other) = delete;
 		GameObject(GameObject&& other) = delete;
 		GameObject& operator=(const GameObject& other) = delete;
@@ -35,6 +45,8 @@ namespace dae
 
 	private:
 		std::vector<std::unique_ptr<Component>> m_components{};
+		std::weak_ptr<GameObject> m_Parent; // Pointer to parent
+		std::vector<std::shared_ptr<GameObject>> m_Children; // Children list
 	};
 
 	// AddComponent: Creates and attaches a component to the GameObject
@@ -96,4 +108,5 @@ namespace dae
 				}),
 			m_components.end());
 	}
+
 }

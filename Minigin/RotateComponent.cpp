@@ -34,8 +34,8 @@ void dae::RotateComponent::Update()
     auto* selfTransform = m_pOwner->GetComponent<Transform>();
     if (!selfTransform) return;
     auto worldPos = selfTransform->GetWorldPosition();
-    std::cout << "Object: " << m_pOwner << " | World Pos: "
-        << worldPos.x << ", " << worldPos.y << std::endl;
+   // std::cout << "Object: " << m_pOwner << " | World Pos: "
+     //   << worldPos.x << ", " << worldPos.y << std::endl;
 
     // Update the angle
     m_CurrentAngle += m_OrbitSpeed * Time::GetDeltaTime();

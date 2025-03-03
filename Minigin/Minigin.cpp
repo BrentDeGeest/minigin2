@@ -78,6 +78,7 @@ dae::Minigin::~Minigin()
 	SDL_Quit();
 }
 
+
 void dae::Minigin::Run(const std::function<void()>& load)
 {
 	load();

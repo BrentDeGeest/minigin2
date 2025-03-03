@@ -28,9 +28,7 @@ namespace dae
 		void CleanupComponents(); // Called at the end of the update loop
 
 		// Parent-Child System
-		void AddChild(std::shared_ptr<GameObject> child);
-		void RemoveChild(std::shared_ptr<GameObject> child);
-		void DetachFromParent();
+		void SetParent(std::shared_ptr<GameObject> newParent);
 
 		const std::vector<std::shared_ptr<GameObject>>& GetChildren() const { return m_Children; }
 		std::shared_ptr<GameObject> GetParent() const { return m_Parent.lock(); }

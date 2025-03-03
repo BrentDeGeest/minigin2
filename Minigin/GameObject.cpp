@@ -11,65 +11,49 @@ dae::GameObject::GameObject()
 
 dae::GameObject::~GameObject()
 {
-	// First, detach all children explicitly
+	// Detach all children before destruction
 	while (!m_Children.empty())
 	{
-		auto child = m_Children.back();
+		m_Children.back()->SetParent(nullptr); // ? Properly remove child from hierarchy
 		m_Children.pop_back();
-		child->m_Parent.reset(); // Reset parent reference
 	}
+	m_Children.clear(); // Remove all child references
 
 	// Clear components before removing from the parent's list
 	m_components.clear();
 
-	// Avoid calling shared_from_this() in the destructor
-	if (!m_Parent.expired()) // Check if parent still exists
+	// Remove from parent safely without `shared_from_this()`
+	if (auto parent = m_Parent.lock())
 	{
-		if (auto parent = m_Parent.lock()) // Convert weak_ptr to shared_ptr safely
-		{
-			parent->RemoveChild(this->shared_from_this()); // Remove from parent's list
-		}
+		auto& siblings = parent->m_Children;
+		siblings.erase(std::remove(siblings.begin(), siblings.end(), shared_from_this()), siblings.end());
 	}
 
-	m_Parent.reset(); // ? Reset parent reference
+	m_Parent.reset(); // Clear weak_ptr reference
 }
 
-void dae::GameObject::AddChild(std::shared_ptr<GameObject> child)
+void dae::GameObject::SetParent(std::shared_ptr<GameObject> newParent)
 {
-	if (!child || child.get() == this || child->GetParent() == shared_from_this())
-		return; // Prevent self-parenting or redundant additions
+	// Prevent self-parenting
+	if (newParent.get() == this) return;
 
-	// If the child has a previous parent, detach it
-	if (auto oldParent = child->GetParent())
+	// If we already have a parent, remove ourselves from its children
+	if (auto oldParent = m_Parent.lock())
 	{
-		oldParent->RemoveChild(child);
+		auto& siblings = oldParent->m_Children;
+		siblings.erase(std::remove(siblings.begin(), siblings.end(), shared_from_this()), siblings.end());
 	}
 
-	// Set the parent-child relationship
-	child->m_Parent = shared_from_this();
-	m_Children.push_back(child);
-}
-
-void dae::GameObject::RemoveChild(std::shared_ptr<GameObject> child)
-{
-	if (!child)
-		return;
-
-	auto it = std::remove(m_Children.begin(), m_Children.end(), child);
-	if (it != m_Children.end())
+	// If newParent is nullptr, we are just detaching
+	if (!newParent)
 	{
-		child->m_Parent.reset(); 
-		m_Children.erase(it, m_Children.end());
-	}
-}
-
-void dae::GameObject::DetachFromParent()
-{
-	if (auto parent = m_Parent.lock()) 
-	{
-		parent->RemoveChild(shared_from_this());
 		m_Parent.reset();
+		return;
 	}
+
+	// Set the new parent and add ourselves as its child
+	m_Parent = newParent;
+	newParent->m_Children.push_back(shared_from_this());
 }
 
 void dae::GameObject::Update() 

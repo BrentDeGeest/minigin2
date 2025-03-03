@@ -111,7 +111,7 @@ public:
 
 class GameObject3DAlt {
 public:
-    static constexpr size_t BUFFER_SIZE = 1 << 26;
+    static constexpr size_t BUFFER_SIZE = 1 << 20;
     Transform* transforms;
     int* IDs;
 
@@ -132,7 +132,7 @@ void RunGameObject3DBenchmark() {
     times_gameobject3d.clear();
     hasRunGameObject3D = true;
 
-    constexpr size_t BUFFER_SIZE = 1 << 26;
+    constexpr size_t BUFFER_SIZE = 1 << 20;
     GameObject3D* objects = new GameObject3D[BUFFER_SIZE]();
 
     for (int step = 1; step <= 1024; step *= 2) {

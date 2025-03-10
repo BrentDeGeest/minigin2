@@ -4,8 +4,9 @@
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #endif
-#include <Windows.h>
-#include <Xinput.h> // Include the real XInput API
+//#include <Windows.h>
+#include <memory>
+//#include <Xinput.h> // Include the real XInput API
 
 namespace dae
 {
@@ -23,7 +24,7 @@ namespace dae
 		bool IsPressed(unsigned int button) const;
 
 		// Controller button enum
-		enum class ControllerButton
+		/*enum class ControllerButton
 		{
 			DPadUp = XINPUT_GAMEPAD_DPAD_UP,
 			DPadDown = XINPUT_GAMEPAD_DPAD_DOWN,
@@ -39,13 +40,16 @@ namespace dae
 			B = XINPUT_GAMEPAD_B,
 			X = XINPUT_GAMEPAD_X,
 			Y = XINPUT_GAMEPAD_Y
-		};
+		};*/
 
 	private:
-		int m_ControllerIndex{ 0 }; // Default to controller 0
-		XINPUT_STATE m_PreviousControllerState{};
-		XINPUT_STATE m_CurrentControllerState{};
-		WORD m_ButtonsPressedThisFrame{};
-		WORD m_ButtonsReleasedThisFrame{};
+		//int m_ControllerIndex{ 0 }; // Default to controller 0
+		//XINPUT_STATE m_PreviousControllerState{};
+		//XINPUT_STATE m_CurrentControllerState{};
+		//WORD m_ButtonsPressedThisFrame{};
+		//WORD m_ButtonsReleasedThisFrame{};
+
+		class XinputImpl;
+		std::unique_ptr<XinputImpl> m_pImpl;
 	};
 }

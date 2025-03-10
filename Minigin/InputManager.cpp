@@ -3,7 +3,7 @@
 #include <SDL.h>
 #include "InputManager.h"
 #include <iostream>
-#include "Xinput.h"
+#include <Xinput.h>
 
 dae::InputManager::InputManager()
 {
@@ -48,7 +48,8 @@ bool dae::InputManager::ProcessInput()
 
 		for (const auto& [button, command] : m_ControllerCommands[int(i)])
 		{
-			if (m_Gamepads[i]->IsPressed(static_cast<unsigned int>(button)) && command)
+			if (command && m_Gamepads[i]->IsPressed(button) )
+				//if (m_Gamepads[i]->IsPressed(static_cast<unsigned int>(button)) && command)
 			{
 				command->Execute();
 			}

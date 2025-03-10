@@ -2,7 +2,7 @@
 #include "Singleton.h"
 #include <memory>
 #include <unordered_map>
-#include "Xinput.h"
+//#include "Xinput.h"
 #include "Command.h"
 #include <SDL.h>
 #include <unordered_set>

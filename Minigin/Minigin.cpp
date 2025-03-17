@@ -11,6 +11,8 @@
 #include "ResourceManager.h"
 #include "Time.h"
 #include "EventQueue.h"
+#include <steam_api.h>
+#include "AchievementManager.h"
 
 SDL_Window* g_window{};
 
@@ -108,7 +110,12 @@ void dae::Minigin::Run(const std::function<void()>& load)
 
 		sceneManager.Update();
 		eventQueue.ProcessEvents();
+
 		renderer.Render();
+
+		//steam callback
+		SteamAPI_RunCallbacks();
+
 		Time::Sleep();
 	}
 }

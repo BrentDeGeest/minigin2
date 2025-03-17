@@ -147,7 +147,7 @@
     <ClInclude Include="HealthComponent.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="AchievementSystem.h">
+    <ClInclude Include="AchievementManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MoveCommand.h">
@@ -163,12 +163,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GainScoreCommand.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Input And Commands</Filter>
     </ClInclude>
     <ClInclude Include="TakeDamageCommand.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Input And Commands</Filter>
     </ClInclude>
     <ClInclude Include="ScoreComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ResetAchievementCommand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -275,7 +278,7 @@
     <ClCompile Include="HealthComponent.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
-    <ClCompile Include="AchievementSystem.cpp">
+    <ClCompile Include="AchievementManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MoveCommand.cpp">
@@ -298,6 +301,9 @@
     </ClCompile>
     <ClCompile Include="ScoreComponent.cpp">
       <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ResetAchievementCommand.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

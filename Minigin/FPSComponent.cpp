@@ -27,7 +27,10 @@ void dae::FPSComponent::Update()
         stream.precision(1);
         stream << std::fixed << fps;
 
-        m_TextComponent->SetText("FPS: " + stream.str());
+        if (m_TextComponent) 
+        {
+            m_TextComponent->SetText("FPS: " + stream.str());
+        }
 
         // Reset the counters
         m_ElapsedTime = 0.0f;

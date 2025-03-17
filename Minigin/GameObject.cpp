@@ -4,7 +4,9 @@
 #include "Renderer.h"
 #include "Component.h"
 
-dae::GameObject::GameObject()
+int dae::GameObject::s_NextID = 1;
+
+dae::GameObject::GameObject() : m_ID(s_NextID++)
 {
 	AddComponent<Transform>(); 
 }

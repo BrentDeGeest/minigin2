@@ -14,7 +14,8 @@ namespace dae
         void Update() override;
 
     private:
-        TextComponent* m_TextComponent = nullptr;
+        //TextComponent* m_TextComponent = nullptr;
+        std::shared_ptr<TextComponent> m_TextComponent = nullptr;
         float m_ElapsedTime = 0.0f;
         int m_FrameCount = 0;
 		std::shared_ptr<Font> m_Font;

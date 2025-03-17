@@ -24,14 +24,16 @@ void dae::RotateComponent::Update()
 
     if (centerObj) // If a valid center exists, use its position
     {
-        auto* centerTransform = centerObj->GetComponent<Transform>();
+        auto centerTransform = centerObj->GetComponent<Transform>();
+        //auto* centerTransform = centerObj->GetComponent<Transform>();
         if (centerTransform)
         {
             centerPosition = centerTransform->GetWorldPosition();
         }
     }
 
-    auto* selfTransform = m_pOwner->GetComponent<Transform>();
+    auto selfTransform = m_pOwner->GetComponent<Transform>();
+    //auto* selfTransform = m_pOwner->GetComponent<Transform>();
     if (!selfTransform) return;
     auto worldPos = selfTransform->GetWorldPosition();
    // std::cout << "Object: " << m_pOwner << " | World Pos: "

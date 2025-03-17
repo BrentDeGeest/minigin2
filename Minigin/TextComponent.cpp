@@ -37,7 +37,8 @@ void dae::TextComponent::Render() const
 {
 	if (m_textTexture && m_pOwner)
 	{
-		auto* transform = m_pOwner->GetComponent<Transform>();
+		auto transform = m_pOwner->GetComponent<Transform>();
+		//auto* transform = m_pOwner->GetComponent<Transform>();
 		if (transform)
 		{
 			const auto& pos = transform->GetWorldPosition();

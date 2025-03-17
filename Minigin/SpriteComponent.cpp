@@ -13,7 +13,8 @@ void dae::SpriteComponent::Render() const
 {
 	if (!m_pOwner) return; // Ensure the component has an owner
 
-	Transform* transform = m_pOwner->GetComponent<Transform>();
+	auto transform = m_pOwner->GetComponent<Transform>();
+	//Transform* transform = m_pOwner->GetComponent<Transform>();
 	if (!transform) return;
 	//const auto& pos = transform->GetLocalPosition();
 	const auto& pos = transform->GetWorldPosition();

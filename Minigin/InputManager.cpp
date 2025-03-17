@@ -56,7 +56,7 @@ bool dae::InputManager::ProcessInput()
 		}
 	}
 
-	// Execute commands for **keyboard keys being held**
+	// Execute commands for keyboard keys being held
 	for (const auto& key : m_KeysHeld)
 	{
 		auto it = m_KeyboardCommands.find(key);

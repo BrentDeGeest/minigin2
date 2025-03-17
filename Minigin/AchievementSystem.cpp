@@ -13,15 +13,15 @@ namespace dae
         switch (gameEvent->GetType())
         {
         case GameEventType::PlayerDied:
-            std::cout << "Player " << gameEvent->GetPlayerId() << " died!" << std::endl;
+            std::cout << "Player " << gameEvent->GetEntityId() << " died!" << std::endl;
             break;
 
         case GameEventType::ScoreChanged:
-            std::cout << "Player " << gameEvent->GetPlayerId() << " new score: " << gameEvent->GetValue() << std::endl;
+            std::cout << "Player " << gameEvent->GetEntityId() << " new score: " << gameEvent->GetValue() << std::endl;
             break;
 
         case GameEventType::HealthChanged:
-            std::cout << "Player " << gameEvent->GetPlayerId() << " new health: " << gameEvent->GetValue() << std::endl;
+            std::cout << "Player " << gameEvent->GetEntityId() << " new health: " << gameEvent->GetValue() << std::endl;
             break;
         }
     }

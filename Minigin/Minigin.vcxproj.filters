@@ -168,6 +168,9 @@
     <ClInclude Include="TakeDamageCommand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ScoreComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ResourceManager.cpp">
@@ -287,11 +290,14 @@
     <ClCompile Include="UIManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GainScoreCommand.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="TakeDamageCommand.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Input And Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="GainScoreCommand.cpp">
+      <Filter>Source Files\Input And Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="ScoreComponent.cpp">
+      <Filter>Source Files\Components</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

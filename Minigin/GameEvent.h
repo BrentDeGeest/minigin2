@@ -15,7 +15,7 @@ namespace dae
     {
     public:
         GameEvent(GameEventType type, int playerId, int value = 0)
-            : m_Type(type), m_PlayerId(playerId), m_Value(value) {
+            : m_Type(type), m_EntityId(playerId), m_Value(value) {
         }
         
         std::string GetEventName() const override
@@ -35,7 +35,7 @@ namespace dae
         //}
 
         GameEventType GetType() const { return m_Type; }
-        int GetPlayerId() const { return m_PlayerId; }
+        int GetEntityId() const { return m_EntityId; }
         int GetValue() const { return m_Value; } // Useful for score, health, etc.
 
         std::string GetEventTypeAsString() const
@@ -51,7 +51,7 @@ namespace dae
 
     private:
         GameEventType m_Type;
-        int m_PlayerId;
+        int m_EntityId;
         int m_Value; // Can store score, health change, etc.
     };
 }

@@ -22,18 +22,31 @@ bool dae::InputManager::ProcessInput()
 			return false;
 		}
 
-		if (e.type == SDL_KEYDOWN) {
-			// Add key to the set when first pressed
-			m_KeysHeld.insert(e.key.keysym.sym);
-		}
-
-		if (e.type == SDL_KEYUP)
+		if (e.type == SDL_KEYDOWN || e.type == SDL_KEYUP)
 		{
-			// Remove key from the set when released
-			m_KeysHeld.erase(e.key.keysym.sym);
-		}
+			auto it = m_KeyboardCommands.find(e.key.keysym.sym);
+			if (it != m_KeyboardCommands.end())
+			{
+				auto& [command, type] = it->second;
+				if ((type == InputType::Pressed && e.type == SDL_KEYDOWN) ||
+					(type == InputType::Released && e.type == SDL_KEYUP))
+				{
+					command->Execute();
+				}
+			}
 
+			if (e.type == SDL_KEYDOWN)
+			{
+				m_KeysHeld.insert(e.key.keysym.sym);
+			}
+			else if (e.type == SDL_KEYUP)
+			{
+				m_KeysHeld.erase(e.key.keysym.sym);
+			}
+		}
 	}
+
+	
 
 	// Update all connected gamepads
 	for (auto& gamepad : m_Gamepads)
@@ -46,10 +59,14 @@ bool dae::InputManager::ProcessInput()
 	{
 		if (!m_Gamepads[i]->IsConnected()) continue;
 
-		for (const auto& [button, command] : m_ControllerCommands[int(i)])
+		int controllerIndex = static_cast<int>(i); // Explicitly cast size_t to int
+
+		for (auto& [button, commandPair] : m_ControllerCommands[controllerIndex])
 		{
-			if (command && m_Gamepads[i]->IsPressed(button) )
-				//if (m_Gamepads[i]->IsPressed(static_cast<unsigned int>(button)) && command)
+			auto& [command, type] = commandPair;
+			if ((type == InputType::Pressed && m_Gamepads[controllerIndex]->IsDownThisFrame(button)) ||
+				(type == InputType::Released && m_Gamepads[controllerIndex]->IsUpThisFrame(button)) ||
+				(type == InputType::Held && m_Gamepads[controllerIndex]->IsPressed(button)))
 			{
 				command->Execute();
 			}
@@ -60,21 +77,21 @@ bool dae::InputManager::ProcessInput()
 	for (const auto& key : m_KeysHeld)
 	{
 		auto it = m_KeyboardCommands.find(key);
-		if (it != m_KeyboardCommands.end() && it->second)
+		if (it != m_KeyboardCommands.end() && it->second.second == InputType::Held)
 		{
-			it->second->Execute();
+			it->second.first->Execute();
 		}
 	}
 
 	return true;
 }
 
-void dae::InputManager::BindKeyboardInput(SDL_Keycode key, std::shared_ptr<Command> command)
+void dae::InputManager::BindKeyboardInput(SDL_Keycode key, std::shared_ptr<Command> command, InputType type)
 {
-	m_KeyboardCommands[key] = std::move(command);
+	m_KeyboardCommands[key] = { std::move(command), type };
 }
 
-void dae::InputManager::BindControllerInput(Gamepad::Button button, std::shared_ptr<Command> command, int controllerIndex)
+void dae::InputManager::BindControllerInput(Gamepad::Button button, std::shared_ptr<Command> command, InputType type, int controllerIndex)
 {
-	m_ControllerCommands[controllerIndex][button] = std::move(command);
+	m_ControllerCommands[controllerIndex][button] = { std::move(command), type };
 }

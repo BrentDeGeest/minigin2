@@ -9,22 +9,15 @@ namespace dae
     class GainScoreCommand final : public Command
     {
     public:
-        GainScoreCommand(GameObject* player, int scoreAmount)
-            : m_Player(player), m_ScoreAmount(scoreAmount) {
+        GainScoreCommand(GameObject* player, int scoreIncrease)
+            : m_pPlayer(player), m_ScoreIncrease(scoreIncrease) {
         }
 
-        void Execute() override
-        {
-            if (!m_Player) return;
-
-            // Send an event for score change
-            EventQueue::GetInstance().PushEvent(
-                std::make_shared<GameEvent>(GameEventType::ScoreChanged, m_Player->GetId(), m_ScoreAmount)
-            );
-        }
+        void Execute() override;
+       
 
     private:
-        GameObject* m_Player;
-        int m_ScoreAmount;
+        GameObject* m_pPlayer;
+        int m_ScoreIncrease;
     };
 }

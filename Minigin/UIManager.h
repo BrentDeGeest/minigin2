@@ -1,25 +1,31 @@
 #pragma once
 #include <unordered_map>
 #include <memory>
-#include <string>
-#include "Observer.h"
+#include <functional>
+#include "Singleton.h"
 #include "TextComponent.h"
+#include "Observer.h"
 
 namespace dae
 {
-    class UIManager final : public Observer
+    class UIManager : public Singleton<UIManager>, public Observer
     {
     public:
-        static UIManager& GetInstance();
+        using EventCallback = std::function<void(std::shared_ptr<Event>)>;
 
-        // Generic function to register any UI element
-        void RegisterUIElement(const std::string& key, std::shared_ptr<TextComponent> textComponent);
+        void RegisterUIElement(const std::string& id, std::shared_ptr<TextComponent> textComponent,
+            const std::string& format = "{value}", EventCallback callback = nullptr);
 
-        // Observer pattern - listens to game events
         void OnNotify(std::shared_ptr<Event> event) override;
 
     private:
-        UIManager() = default;
-        std::unordered_map<std::string, std::shared_ptr<TextComponent>> m_UIElements;
+        struct UIElement
+        {
+            std::shared_ptr<TextComponent> textComponent;
+            std::string format;
+            EventCallback callback;
+        };
+
+        std::unordered_map<std::string, UIElement> m_UIElements;
     };
 }
